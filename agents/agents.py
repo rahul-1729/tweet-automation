@@ -3,11 +3,16 @@ from constants import number_of_days, times_per_day
 from prompt import BUSSINESS_DESCRIPTION, CRITIC_PROMPT, TAGGER_PROMPT, WRITER_PROMPT, USER_PROXY_PROMPT
 import os
 import dotenv
+import requests
+import uuid
+
 
 # Load environment variables
 dotenv.load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GOOGLE_SHEET_LINK = os.getenv("GOOGLE_SHEET_LINK")
+
 
 # from configs.gemini_config import OAI_CONFIG_LIST
 
@@ -21,7 +26,8 @@ llm_config_gemini = {
         "api_type": "google"
     }
 ],
-    "seed" : seed
+    "seed" : seed,
+    "temperature": 0.9
 }
 
 
@@ -66,7 +72,7 @@ agents = [user_proxy,content_researcher, content_writer,tweet_tagger, content_cr
 chat = GroupChat(
     agents=agents,
     messages=[],
-    max_round=5,  # Reduced rounds to avoid empty responses
+    max_round=5,  
     speaker_selection_method="round_robin"
 )
 
@@ -106,6 +112,7 @@ def extract_final_tweet(chat_result):
     return "No tweet generated"
 
 def generate_tweet():
+    chat.messages = []
     """Generate a single tweet"""
     initial_message = BUSSINESS_DESCRIPTION
 
@@ -116,18 +123,50 @@ def generate_tweet():
         summary_method="reflection_with_llm",
     )
     
-    # Extract the final tweet
+   
     final_tweet = extract_final_tweet(chat_result)
+    
+   
     return final_tweet
+
+def post_tweet_to_api(tweet_content):
+    """Post the generated tweet to Google Apps Script API"""
+    try:
+        api_url = GOOGLE_SHEET_LINK
+       
+        
+        # Prepare the data payload
+        payload = {
+            "tweet_id":str(uuid.uuid4()),
+            "tweet": tweet_content,
+            "status":"pending",
+            "task": "new_tweet"
+        }
+        
+        # Make the POST request
+        response = requests.post(api_url, json=payload)
+        
+        if response.status_code == 200:
+            print(f"✅ Tweet successfully posted to API!")
+            print(f"Response: {response.text}")
+            return True
+        else:
+            print(f"Failed to post tweet. Status code: {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"Error posting tweet to API: {str(e)}")
+        return False
 
 if __name__ == "__main__":
     # Test the tweet generation
    
     number_of_tweets = number_of_days * times_per_day
     
-    for tweet in range(number_of_tweets):
+    for i in range(number_of_tweets):
         tweet = generate_tweet()
-        print(f"\nFinal Tweet:")
+        print(f"\nFinal Tweet {i}:")
         print(f"'{tweet}'")
-   
- 
+        post_tweet_to_api(tweet)
+

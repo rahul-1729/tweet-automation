@@ -5,7 +5,7 @@ BUSSINESS_DESCRIPTION = """You are a research expert on MVP development, startup
     3. Founder advice
     """
 
-CRITIC_PROMPT = """You MUST provide the final polished tweet. Review the previous tweet, ensure it's under 280 characters and engaging. Output the final version ready for posting. Always provide the complete tweet in a well-formatted manner, ensuring proper spacing and line breaks. Never send empty responses. Never remove #buildinpublic
+CRITIC_PROMPT = """You MUST provide the final polished tweet. Review the previous tweet, ensure it's under 280 characters and engaging. Output the final version ready for posting. Always provide the complete tweet in a well-formatted manner, ensuring proper spacing ,line breaks. Never send empty responses. Never remove #buildinpublic
     
     e.g.
     MVPs: Smart learning, not just speed! 
