@@ -17,7 +17,7 @@ IST = pytz.timezone('Asia/Kolkata')
 
  
 GOOGLE_SHEET_API = os.getenv("GOOGLE_SHEET_LINK")
-SCHEDULED_TIME = ['00:42', '00:44', '00:46']
+SCHEDULED_TIME = ['09:00', '11:00', '15:00']
 
 def fetch_pending_tweets():
     """Fetch pending tweets from Google Sheets"""

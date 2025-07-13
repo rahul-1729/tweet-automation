@@ -66,7 +66,7 @@ GEMINI_API_KEY=your_gemini_api_key (optional)
 ```javascript
 function doPost(e) {
   try {
-    const ss = SpreadsheetApp.openById("1HpmUsGe8tFLRqemHlQcaHTYVTqbT6NHr6ilvejvaS7s");
+    const ss = SpreadsheetApp.openById("<sheet_id>");
     const sheet = ss.getSheetByName("Sheet1");
 
     var data = JSON.parse(e.postData.contents);
@@ -116,7 +116,7 @@ function doPost(e) {
 
 function doGet(e) {
   try {
-    const ss = SpreadsheetApp.openById("1HpmUsGe8tFLRqemHlQcaHTYVTqbT6NHr6ilvejvaS7s");
+    const ss = SpreadsheetApp.openById("<sheet_id>");
     const sheet = ss.getSheetByName("Sheet1");
 
     const data = sheet.getDataRange().getValues(); // includes headers
@@ -220,4 +220,4 @@ This script sends a test POST request to your Apps Script endpoint to update a t
 
 ---
 
-**Happy Automating! 🐦**
+**Happy Automating! **
