@@ -220,4 +220,4 @@ This script sends a test POST request to your Apps Script endpoint to update a t
 
 ---
 
-**Happy Automating! **
+**Happy Learning, Keep Building**
